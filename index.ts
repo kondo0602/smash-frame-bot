@@ -21,6 +21,9 @@ const client = new Client(clientConfig);
 // Create a new Express application.
 const app: Application = express();
 
+const fs = require('fs');
+const csv = require('csv');
+
 // Isolate message characterName and command.
 async function isolateNameAndCommand(message: string) {
   const characterNameList = ["マリオ", "まりお", "ルイージ"];
@@ -74,6 +77,14 @@ const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponse
   // Process all message related variables here.
   const { replyToken } = event;
   const text: string = characterName;
+
+  // Read frame sheet.
+  fs.createReadStream(__dirname + "/../csv/" + characterName + ".csv").pipe(
+    csv.parse({ columns: true }, function (err: unknown, json: JSON) {
+
+      console.log(json);
+    })
+  );
 
   // Create a new message.
   const response: TextMessage = {
