@@ -60,6 +60,44 @@ async function formatCharacterName(nickName: string) {
   return characterName;
 }
 
+function buildReplyMessage(json: string[], command: string) {
+  // const list = ['技カテゴリ', '技名', '判定持続', '全体フレーム', '基礎ダメージ', 'ダメージ (1v1)', 'ダメ (1v1+小J)', 'ガード硬直', '慣性消去', '着地隙', '着地隙発生F', '慣性反転', ’向き反転', '無敵フレーム', '無敵 (ペナ最大)', '全体 (ペナ最大)'];
+  const list: string[] = [
+    "技名",
+    "判定持続",
+    "全体フレーム",
+    "ガード硬直",
+    "着地隙",
+    "着地隙発生F",
+    "慣性反転",
+    "向き反転",
+    "無敵フレーム",
+    "無敵 (ペナ最大)",
+    "全体 (ペナ最大)",
+  ];
+  let replyMessage = "";
+
+  json.forEach((data) => {
+    if (data["技カテゴリ"] === command || data["技名"].startsWith(command)) {
+      list.forEach((elem) => {
+        if (elem === "技名") {
+          if (replyMessage === "") {
+            replyMessage += `${elem}：${data[elem]}`;
+          } else {
+            replyMessage += `\r\r${elem}：${data[elem]}`;
+          }
+        } else {
+          if (data[elem] !== "") {
+            replyMessage += `\r${elem}：${data[elem]}`;
+          }
+        }
+      });
+    }
+  });
+
+  return replyMessage;
+}
+
 // Function handler to receive the text.
 const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponseBase | undefined> => {
   // Process all variables here.
@@ -74,26 +112,27 @@ const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponse
   console.log(`入力されたキャラクター名：${characterName}`);
   console.log(`入力されたコマンド：${command}`);
 
-  // Process all message related variables here.
-  const { replyToken } = event;
-  const text: string = characterName;
-
   // Read frame sheet.
   fs.createReadStream(__dirname + "/../csv/" + characterName + ".csv").pipe(
     csv.parse({ columns: true }, function (err: unknown, json: JSON) {
 
-      console.log(json);
+      // Process all message related variables here.
+      const { replyToken } = event;
+      const text: string = characterName;
+
+      const replyMessage: string = buildReplyMessage(json, command);
+
+      // Create a new message.
+      const response: TextMessage = {
+        type: 'text',
+        text: replyMessage,
+      };
+
+      // Reply to the user.
+      return client.replyMessage(replyToken, response);
     })
   );
 
-  // Create a new message.
-  const response: TextMessage = {
-    type: 'text',
-    text,
-  };
-
-  // Reply to the user.
-  await client.replyMessage(replyToken, response);
 };
 
 // This route is used for the Webhook.
