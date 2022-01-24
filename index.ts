@@ -21,6 +21,22 @@ const client = new Client(clientConfig);
 // Create a new Express application.
 const app: Application = express();
 
+// Isolate message characterName and command.
+async function isolateNameAndCommand(message: string) {
+  const characterList = ["マリオ", "まりお", "ルイージ"];
+  let characterName = "";
+  let command = "";
+
+  for (const element of characterList) {
+    if (message.startsWith(element)) {
+      characterName = element;
+      command = message.slice(element.length);
+    }
+  }
+
+  return [characterName, command];
+}
+
 // Function handler to receive the text.
 const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponseBase | undefined> => {
   // Process all variables here.
@@ -28,9 +44,16 @@ const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponse
     return;
   }
 
+  // Isolate message character name and command
+  let characterName: string, command: string;
+  [characterName, command] = await isolateNameAndCommand(event.message.text);
+
+  console.log(characterName);
+  console.log(command);
+
   // Process all message related variables here.
   const { replyToken } = event;
-  const { text } = event.message;
+  const text: string = characterName;
 
   // Create a new message.
   const response: TextMessage = {
