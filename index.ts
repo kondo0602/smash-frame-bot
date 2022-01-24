@@ -23,18 +23,38 @@ const app: Application = express();
 
 // Isolate message characterName and command.
 async function isolateNameAndCommand(message: string) {
-  const characterList = ["マリオ", "まりお", "ルイージ"];
-  let characterName = "";
+  const characterNameList = ["マリオ", "まりお", "ルイージ"];
+  let formattedCharacterName = "";
   let command = "";
 
-  for (const element of characterList) {
-    if (message.startsWith(element)) {
-      characterName = element;
-      command = message.slice(element.length);
+  for (const characterName of characterNameList) {
+    if (message.startsWith(characterName)) {
+      formattedCharacterName = await formatCharacterName(characterName);
+      command = message.slice(characterName.length);
     }
   }
 
-  return [characterName, command];
+  return [formattedCharacterName, command];
+}
+
+// Format character name.
+async function formatCharacterName(nickName: string) {
+  let characterName = "";
+
+  switch (nickName) {
+    case "マリオ":
+    case "まりお":
+      characterName = "01_マリオ";
+      break;
+    case "ルイージ":
+    case "るいーじ":
+      characterName = "02_ルイージ";
+      break;
+    default:
+      console.log("該当なし");
+  }
+
+  return characterName;
 }
 
 // Function handler to receive the text.
@@ -48,8 +68,8 @@ const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponse
   let characterName: string, command: string;
   [characterName, command] = await isolateNameAndCommand(event.message.text);
 
-  console.log(characterName);
-  console.log(command);
+  console.log(`入力されたキャラクター名：${characterName}`);
+  console.log(`入力されたコマンド：${command}`);
 
   // Process all message related variables here.
   const { replyToken } = event;
