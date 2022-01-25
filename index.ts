@@ -49,12 +49,15 @@ async function formatCharacterName(nickName: string) {
       characterName = "01_マリオ";
       break;
     case "ドンキーコング":
+    case "DK":
       characterName = "02_ドンキーコング";
       break;
     case "リンク":
       characterName = "03_リンク";
       break;
     case "サムス":
+    case "ダークサムス":
+    case "ダムス":
       characterName = "04_サムス";
       break;
     case "ヨッシー":
@@ -76,6 +79,7 @@ async function formatCharacterName(nickName: string) {
       characterName = "10_ネス";
       break;
     case "キャプテン・ファルコン":
+    case "CF":
       characterName = "11_キャプテン・ファルコン";
       break;
     case "プリン":
@@ -88,6 +92,7 @@ async function formatCharacterName(nickName: string) {
       characterName = "14_クッパ";
       break;
     case "アイスクライマー":
+    case "アイクラ":
       characterName = "15_アイスクライマー";
       break;
     case "シーク":
@@ -97,6 +102,7 @@ async function formatCharacterName(nickName: string) {
       characterName = "17_ゼルダ";
       break;
     case "ドクターマリオ":
+    case "ドクマリ":
       characterName = "18_ドクターマリオ";
       break;
     case "ピチュー":
@@ -109,9 +115,12 @@ async function formatCharacterName(nickName: string) {
       characterName = "21_ルキナ";
       break;
     case "こどもリンク":
+    case "こどリン":
+    case "ヤンリン":
       characterName = "22_こどもリンク";
       break;
     case "ガノンドロフ":
+    case "ガノン":
       characterName = "23_ガノンドロフ";
       break;
     case "ミュウツー":
@@ -120,16 +129,22 @@ async function formatCharacterName(nickName: string) {
     case "ロイ":
       characterName = "25_ロイ";
       break;
-    case "Mr":
+    case "ゲームウォッチ":
+    case "ゲムヲ":
+    case "ゲッチ":
       characterName = "26_Mr";
       break;
     case "メタナイト":
       characterName = "27_メタナイト";
       break;
     case "ピット":
+    case "ブラックピット":
+    case "ブラピ":
       characterName = "28_ピット";
       break;
     case "ゼロスーツサムス":
+    case "ゼロサム":
+    case "ZSS":
       characterName = "29_ゼロスーツサムス";
       break;
     case "ワリオ":
@@ -151,6 +166,8 @@ async function formatCharacterName(nickName: string) {
       characterName = "35_リザードン";
       break;
     case "ディディーコング":
+    case "ディディー":
+    case "DD":
       characterName = "36_ディディーコング";
       break;
     case "リュカ":
@@ -163,6 +180,7 @@ async function formatCharacterName(nickName: string) {
       characterName = "39_デデデ";
       break;
     case "ピクミン&オリマー":
+    case "ピクオリ":
       characterName = "40_ピクミン&オリマー";
       break;
     case "ルカリオ":
@@ -172,6 +190,8 @@ async function formatCharacterName(nickName: string) {
       characterName = "42_ロボット";
       break;
     case "トゥーンリンク":
+    case "トゥーン":
+    case "トリン":
       characterName = "43_トゥーンリンク";
       break;
     case "ウルフ":
@@ -184,12 +204,16 @@ async function formatCharacterName(nickName: string) {
       characterName = "46_ロックマン";
       break;
     case "Wii Fit トレーナー":
+    case "フィットレ":
       characterName = "47_Wii Fit トレーナー";
       break;
     case "ロゼッタ&チコ":
+    case "ロゼチコ":
       characterName = "48_ロゼッタ&チコ";
       break;
     case "リトル・マック":
+    case "マック":
+    case "トルマク":
       characterName = "49_リトル・マック";
       break;
     case "ゲッコウガ":
@@ -202,6 +226,7 @@ async function formatCharacterName(nickName: string) {
       characterName = "52_剣術Mii";
       break;
     case "射撃Mii":
+    case "シャゲミ":
       characterName = "53_射撃Mii";
       break;
     case "パルテナ":
@@ -216,7 +241,10 @@ async function formatCharacterName(nickName: string) {
     case "シュルク":
       characterName = "57_シュルク";
       break;
-    case "クッパ Jr":
+    case "クッパJr":
+    case "クッパジュニア":
+    case "ジュニア":
+    case "パジュニ":
       characterName = "58_クッパJr";
       break;
     case "ダックハント":
@@ -232,6 +260,7 @@ async function formatCharacterName(nickName: string) {
       characterName = "62_カムイ";
       break;
     case "ベヨネッタ":
+    case "ベヨ":
       characterName = "63_ベヨネッタ";
       break;
     case "インクリング":
@@ -244,15 +273,19 @@ async function formatCharacterName(nickName: string) {
       characterName = "66_シモン";
       break;
     case "キングクルール":
+    case "キンクル":
+    case "クルール":
       characterName = "67_キングクルール";
       break;
     case "しずえ":
       characterName = "68_しずえ";
       break;
     case "ガオガエン":
+    case "ガエン":
       characterName = "69_ガオガエン";
       break;
     case "パックンフラワー":
+    case "パックン":
       characterName = "70_パックンフラワー";
       break;
     case "ジョーカー":
@@ -262,18 +295,23 @@ async function formatCharacterName(nickName: string) {
       characterName = "72_勇者";
       break;
     case "バンジョー&カズーイ":
+    case "バンカズ":
       characterName = "73_バンジョー&カズーイ";
       break;
     case "テリー":
       characterName = "74_テリー";
       break;
-    case "ルフレ":
-      characterName = "75_ルフレ";
+    case "ベレトス":
+    case "ベレト":
+    case "ベレス":
+      characterName = "75_ベレト";
       break;
     case "ミェンミェン":
+    case "麺":
       characterName = "76_ミェンミェン";
       break;
     case "スティーブ":
+    case "アレックス":
       characterName = "77_スティーブ";
       break;
     case "セフィロス":
