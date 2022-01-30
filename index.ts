@@ -26,7 +26,7 @@ const csv = require('csv');
 
 // Isolate message characterName and command.
 async function isolateNameAndCommand(message: string) {
-  const characterNameList = ["マリオ", "まりお", "ルイージ"];
+  const characterNameList = ["マリオ", "まりお", "ルイージ", "プリン"];
   let formattedCharacterName = "";
   let command = "";
 
