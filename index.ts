@@ -34,7 +34,7 @@ const fs = require('fs');
 const csv = require('csv');
 
 // Isolate message characterName and command.
-async function isolateNameAndCommand(message: string) {
+const isolateNameAndCommand = async (message: string) => {
   const characterNameList = ['マリオ', 'まりお', 'ルイージ', 'プリン'];
   let formattedCharacterName = '';
   let command = '';
@@ -47,9 +47,9 @@ async function isolateNameAndCommand(message: string) {
   }
 
   return [formattedCharacterName, command];
-}
+};
 
-function buildReplyMessage(json: string[], command: string) {
+const buildReplyMessage = (json: string[], command: string) => {
   // const list = ['技カテゴリ', '技名', '判定持続', '全体フレーム', '基礎ダメージ', 'ダメージ (1v1)', 'ダメ (1v1+小J)', 'ガード硬直', '慣性消去', '着地隙', '着地隙発生F', '慣性反転', ’向き反転', '無敵フレーム', '無敵 (ペナ最大)', '全体 (ペナ最大)'];
   const list: string[] = [
     '技名',
@@ -85,7 +85,7 @@ function buildReplyMessage(json: string[], command: string) {
   });
 
   return replyMessage;
-}
+};
 
 // Function handler to receive the text.
 const textEventHandler = async (
