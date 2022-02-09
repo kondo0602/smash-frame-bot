@@ -1,7 +1,15 @@
 // Import all dependencies, mostly using destructuring for better view.
-import { ClientConfig, Client, middleware, MiddlewareConfig, WebhookEvent, TextMessage, MessageAPIResponseBase } from '@line/bot-sdk';
+import {
+  ClientConfig,
+  Client,
+  middleware,
+  MiddlewareConfig,
+  WebhookEvent,
+  TextMessage,
+  MessageAPIResponseBase,
+} from '@line/bot-sdk';
 import express, { Application, Request, Response } from 'express';
-import { formatCharacterName } from './lib/formatCharacterName'
+import { formatCharacterName } from './lib/formatCharacterName';
 
 // Setup all LINE client and Express configurations.
 const clientConfig: ClientConfig = {
@@ -26,10 +34,10 @@ const fs = require('fs');
 const csv = require('csv');
 
 // Isolate message characterName and command.
-async function isolateNameAndCommand(message: string) {
-  const characterNameList = ["マリオ", "まりお", "ルイージ", "プリン"];
-  let formattedCharacterName = "";
-  let command = "";
+const isolateNameAndCommand = async (message: string) => {
+  const characterNameList = ['マリオ', 'まりお', 'ルイージ', 'プリン'];
+  let formattedCharacterName = '';
+  let command = '';
 
   for (const characterName of characterNameList) {
     if (message.startsWith(characterName)) {
@@ -39,36 +47,36 @@ async function isolateNameAndCommand(message: string) {
   }
 
   return [formattedCharacterName, command];
-}
+};
 
-function buildReplyMessage(json: string[], command: string) {
+const buildReplyMessage = (json: string[], command: string) => {
   // const list = ['技カテゴリ', '技名', '判定持続', '全体フレーム', '基礎ダメージ', 'ダメージ (1v1)', 'ダメ (1v1+小J)', 'ガード硬直', '慣性消去', '着地隙', '着地隙発生F', '慣性反転', ’向き反転', '無敵フレーム', '無敵 (ペナ最大)', '全体 (ペナ最大)'];
   const list: string[] = [
-    "技名",
-    "判定持続",
-    "全体フレーム",
-    "ガード硬直",
-    "着地隙",
-    "着地隙発生F",
-    "慣性反転",
-    "向き反転",
-    "無敵フレーム",
-    "無敵 (ペナ最大)",
-    "全体 (ペナ最大)",
+    '技名',
+    '判定持続',
+    '全体フレーム',
+    'ガード硬直',
+    '着地隙',
+    '着地隙発生F',
+    '慣性反転',
+    '向き反転',
+    '無敵フレーム',
+    '無敵 (ペナ最大)',
+    '全体 (ペナ最大)',
   ];
-  let replyMessage = "";
+  let replyMessage = '';
 
   json.forEach((data) => {
-    if (data["技カテゴリ"] === command || data["技名"].startsWith(command)) {
+    if (data['技カテゴリ'] === command || data['技名'].startsWith(command)) {
       list.forEach((elem) => {
-        if (elem === "技名") {
-          if (replyMessage === "") {
+        if (elem === '技名') {
+          if (replyMessage === '') {
             replyMessage += `${elem}：${data[elem]}`;
           } else {
             replyMessage += `\r\r${elem}：${data[elem]}`;
           }
         } else {
-          if (data[elem] !== "") {
+          if (data[elem] !== '') {
             replyMessage += `\r${elem}：${data[elem]}`;
           }
         }
@@ -77,10 +85,12 @@ function buildReplyMessage(json: string[], command: string) {
   });
 
   return replyMessage;
-}
+};
 
 // Function handler to receive the text.
-const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponseBase | undefined> => {
+const textEventHandler = async (
+  event: WebhookEvent,
+): Promise<MessageAPIResponseBase | undefined> => {
   // Process all variables here.
   if (event.type !== 'message' || event.message.type !== 'text') {
     return;
@@ -94,9 +104,8 @@ const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponse
   console.log(`入力されたコマンド：${command}`);
 
   // Read frame sheet.
-  fs.createReadStream(__dirname + "/../csv/" + characterName + ".csv").pipe(
+  fs.createReadStream(__dirname + '/../csv/' + characterName + '.csv').pipe(
     csv.parse({ columns: true }, function (err: unknown, json: JSON) {
-
       // Process all message related variables here.
       const { replyToken } = event;
       const text: string = characterName;
@@ -111,9 +120,8 @@ const textEventHandler = async (event: WebhookEvent): Promise<MessageAPIResponse
 
       // Reply to the user.
       return client.replyMessage(replyToken, response);
-    })
+    }),
   );
-
 };
 
 // This route is used for the Webhook.
@@ -138,7 +146,7 @@ app.post(
             status: 'error',
           });
         }
-      })
+      }),
     );
 
     // Return a successfull message.
@@ -146,7 +154,7 @@ app.post(
       status: 'success',
       results,
     });
-  }
+  },
 );
 
 // Create a server and listen to it.
