@@ -52,7 +52,7 @@ const isolateNameAndCommand = async (message: string) => {
   return [formattedCharacterName, command];
 };
 
-const buildReplyMessage = (json: any, command: string) => {
+const buildReplyMessage = (json: CommandData[], command: string) => {
   // const list = ['技カテゴリ', '技名', '判定持続', '全体フレーム', '基礎ダメージ', 'ダメージ (1v1)', 'ダメ (1v1+小J)', 'ガード硬直', '慣性消去', '着地隙', '着地隙発生F', '慣性反転', ’向き反転', '無敵フレーム', '無敵 (ペナ最大)', '全体 (ペナ最大)'];
   const list: string[] = [
     '技名',
@@ -108,7 +108,7 @@ const textEventHandler = async (
 
   // Read frame sheet.
   fs.createReadStream(__dirname + '/../csv/' + characterName + '.csv').pipe(
-    csv.parse({ columns: true }, function (err: unknown, json: any) {
+    csv.parse({ columns: true }, function (err: unknown, json: CommandData[]) {
       // Process all message related variables here.
       const { replyToken } = event;
       const text: string = characterName;
