@@ -106,6 +106,11 @@ const textEventHandler = async (
   console.log(`入力されたキャラクター名：${characterName}`);
   console.log(`入力されたコマンド：${command}`);
 
+  if (!fs.existsSync(__dirname + '/../csv/' + characterName + '.csv')) {
+    console.log(`ファイル ${characterName}.csv は、存在しません`);
+    return;
+  }
+
   // Read frame sheet.
   fs.createReadStream(__dirname + '/../csv/' + characterName + '.csv').pipe(
     csv.parse({ columns: true }, function (err: unknown, json: CommandData[]) {
