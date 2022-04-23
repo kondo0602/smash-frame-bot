@@ -363,23 +363,14 @@ public constructor (client: Client, commandDataRepo: CommandDataRepository) {
   this.commandDataRepo = commandDataRepo
 }
 
-  public async do(event: WebhookEvent) {
-    if (event.type !== 'message' || event.message.type !== 'text') {
-      return;
-    }
-
-    const { replyToken } = event;
-
-    // Isolate message character name and command
+  public async do(replyToken: string, text:string) {
     let characterName: string, command: string;
-    [characterName, command] = await isolateNameAndCommand(event.message.text);
+    [characterName, command] = await isolateNameAndCommand(text);
 
     console.log(`入力されたキャラクター名：${characterName}`);
     console.log(`入力されたコマンド：${command}`);
 
     const characterData = await this.commandDataRepo.getCharacterData(characterName);
-
-    const text: string = characterName;
 
     const replyMessage: string = buildReplyMessage(characterData, command);
 

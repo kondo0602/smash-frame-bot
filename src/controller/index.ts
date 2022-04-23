@@ -43,8 +43,14 @@ app.post(
     const results = await Promise.all(
       events.map(async (event: WebhookEvent) => {
         try {
+          if (event.type !== 'message' || event.message.type !== 'text') {
+            return;
+          }
+
+          const { replyToken } = event;
+
           const getCommandDataUsecase = new GetCommandDataUsecase(client, repo);
-          await getCommandDataUsecase.do(event);
+          await getCommandDataUsecase.do(replyToken, event.message.text);
         } catch (err: unknown) {
           if (err instanceof Error) {
             console.error(err);
