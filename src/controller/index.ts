@@ -11,6 +11,7 @@ import {
 import express, { Application, Request, Response } from 'express';
 import type { CommandData } from '../../type/CommandData';
 import { formatCharacterName } from '../../lib/formatCharacterName';
+import { CharacterDataRepository } from '../infrastructure/character-data-repository';
 
 require('dotenv').config();
 
@@ -32,9 +33,6 @@ const client = new Client(clientConfig);
 
 // Create a new Express application.
 const app: Application = express();
-
-const fs = require('fs');
-const csv = require('csv');
 
 // Isolate message characterName and command.
 const isolateNameAndCommand = async (message: string) => {
@@ -106,27 +104,24 @@ const textEventHandler = async (
   console.log(`入力されたキャラクター名：${characterName}`);
   console.log(`入力されたコマンド：${command}`);
 
-  // Read frame sheet.
-  fs.createReadStream(
-    __dirname + '/../../../src/infrastructure/csv/' + characterName + '.csv',
-  ).pipe(
-    csv.parse({ columns: true }, function (err: unknown, json: CommandData[]) {
-      // Process all message related variables here.
-      const { replyToken } = event;
-      const text: string = characterName;
+  const characterRepo = new CharacterDataRepository();
+  const characterData = await characterRepo.getCharacterData(characterName);
 
-      const replyMessage: string = buildReplyMessage(json, command);
+  console.log(characterData);
 
-      // Create a new message.
-      const response: TextMessage = {
-        type: 'text',
-        text: replyMessage,
-      };
+  const { replyToken } = event;
+  const text: string = characterName;
 
-      // Reply to the user.
-      return client.replyMessage(replyToken, response);
-    }),
-  );
+  const replyMessage: string = buildReplyMessage(characterData, command);
+
+  // Create a new message.
+  const response: TextMessage = {
+    type: 'text',
+    text: replyMessage,
+  };
+
+  // Reply to the user.
+  return client.replyMessage(replyToken, response);
 };
 
 // This route is used for the Webhook.
