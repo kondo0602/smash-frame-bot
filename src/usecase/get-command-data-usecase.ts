@@ -1,8 +1,4 @@
-import {
-  Client,
-  WebhookEvent,
-  TextMessage,
-} from '@line/bot-sdk';
+import { Client, WebhookEvent, TextMessage } from '@line/bot-sdk';
 import { CommandData } from '../../type/CommandData';
 import { CommandDataRepository } from '../../src/infrastructure/command-data-repository';
 
@@ -316,7 +312,6 @@ const isolateNameAndCommand = async (message: string) => {
   return [formattedCharacterName, command];
 };
 
-
 const buildReplyMessage = (json: CommandData[], command: string) => {
   const list: string[] = [
     '技名',
@@ -355,24 +350,27 @@ const buildReplyMessage = (json: CommandData[], command: string) => {
 };
 
 export class GetCommandDataUsecase {
-  private readonly client:Client
-  private readonly commandDataRepo:CommandDataRepository
+  private readonly client: Client;
+  private readonly commandDataRepo: CommandDataRepository;
 
-public constructor (client: Client, commandDataRepo: CommandDataRepository) {
-  this.client = client
-  this.commandDataRepo = commandDataRepo
-}
+  public constructor(client: Client, commandDataRepo: CommandDataRepository) {
+    this.client = client;
+    this.commandDataRepo = commandDataRepo;
+  }
 
-  public async do(replyToken: string, text:string) {
+  public async do(replyToken: string, text: string) {
     let characterName: string, command: string;
     [characterName, command] = await isolateNameAndCommand(text);
 
     console.log(`入力されたキャラクター名：${characterName}`);
     console.log(`入力されたコマンド：${command}`);
 
-    const characterData = await this.commandDataRepo.getCharacterData(characterName);
+    const character = await this.commandDataRepo.getCharacter(characterName);
 
-    const replyMessage: string = buildReplyMessage(characterData, command);
+    const replyMessage: string = buildReplyMessage(
+      character.commandDatas,
+      command,
+    );
 
     // Create a new message.
     const response: TextMessage = {

@@ -9,10 +9,6 @@ export class Character {
     this._commandDatas = commandDatas;
   }
 
-  get name(): string {
-    return this._name;
-  }
-
   get commandDatas(): CommandData[] {
     return this._commandDatas;
   }

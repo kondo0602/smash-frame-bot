@@ -1,16 +1,17 @@
 import fs from 'fs';
 import csv from 'csvtojson';
+import { Character } from '../domain/entity/character';
 import { CommandData } from '../../type/CommandData';
 
 export class CommandDataRepository {
-  public getCharacterData(name: string): Promise<CommandData[]> {
+  public getCharacter(name: string): Promise<Character> {
     return new Promise((resolve, reject) => {
       let datas: CommandData[] = [];
       fs.createReadStream(
         __dirname + '/../../../src/infrastructure/csv/' + name + '.csv',
       )
         .pipe(csv().on('data', (data: any) => datas.push(JSON.parse(data))))
-        .on('end', () => resolve(datas));
+        .on('end', () => resolve(new Character(name, datas)));
     });
   }
 }
