@@ -1,6 +1,7 @@
 import { ClientConfig, Client, WebhookEvent } from '@line/bot-sdk';
 import { GetCommandDataUsecase } from '../usecase/get-command-data-usecase';
 import { CommandDataRepository } from '../infrastructure/command-data-repository';
+import { isolateNameAndCommand } from './__shared__/isolate-name-and-command';
 
 require('dotenv').config();
 
@@ -15,15 +16,17 @@ const client = new Client(clientConfig);
 
 export class CommandController {
   public async search(event: WebhookEvent) {
-    console.log(event);
     if (event.type !== 'message' || event.message.type !== 'text') {
       return;
     }
+
+    let name: string, command: string;
+    [name, command] = isolateNameAndCommand(event.message.text);
 
     const repo = new CommandDataRepository();
     const getCommandDataUsecase = new GetCommandDataUsecase(client, repo);
     const { replyToken } = event;
 
-    await getCommandDataUsecase.do(replyToken, event.message.text);
+    await getCommandDataUsecase.do(replyToken, name, command);
   }
 }
