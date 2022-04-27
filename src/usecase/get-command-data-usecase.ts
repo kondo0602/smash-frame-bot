@@ -358,7 +358,7 @@ export class GetCommandDataUsecase {
     this.commandDataRepo = commandDataRepo;
   }
 
-  public async do(replyToken: string, text: string) {
+  public async do(replyToken: string, text: string): Promise<void> {
     let characterName: string, command: string;
     [characterName, command] = await isolateNameAndCommand(text);
 

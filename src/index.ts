@@ -1,32 +1,14 @@
 // Import all dependencies, mostly using destructuring for better view.
-import {
-  ClientConfig,
-  Client,
-  middleware,
-  MiddlewareConfig,
-  WebhookEvent,
-} from '@line/bot-sdk';
+import { middleware, MiddlewareConfig, WebhookEvent } from '@line/bot-sdk';
 import express, { Application, Request, Response } from 'express';
-import { GetCommandDataUsecase } from './usecase/get-command-data-usecase';
-import { CommandDataRepository } from './infrastructure/command-data-repository';
+import { CommandController } from './controller/command-controller';
 
 require('dotenv').config();
-
-// Setup all LINE client and Express configurations.
-const clientConfig: ClientConfig = {
-  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || '',
-  channelSecret: process.env.CHANNEL_SECRET,
-};
 
 const middlewareConfig: MiddlewareConfig = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.CHANNEL_SECRET || '',
 };
-
-const PORT = process.env.PORT || 3000;
-
-// Create a new LINE SDK client.
-const client = new Client(clientConfig);
 
 // Create a new Express application.
 const app: Application = express();
@@ -38,20 +20,13 @@ app.post(
   async (req: Request, res: Response): Promise<Response> => {
     const events: WebhookEvent[] = req.body.events;
 
-    const repo = new CommandDataRepository();
     // Process all of the received events asynchronously.
     const results = await Promise.all(
       events.map(async (event: WebhookEvent) => {
         try {
-          if (event.type !== 'message' || event.message.type !== 'text') {
-            return;
-          }
-
-          const { replyToken } = event;
-
-          const getCommandDataUsecase = new GetCommandDataUsecase(client, repo);
-          await getCommandDataUsecase.do(replyToken, event.message.text);
-        } catch (err: unknown) {
+          const commandController = new CommandController();
+          commandController.search(event);
+        } catch (err: any) {
           if (err instanceof Error) {
             console.error(err);
           }
@@ -71,6 +46,8 @@ app.post(
     });
   },
 );
+
+const PORT = process.env.PORT || 3000;
 
 // Create a server and listen to it.
 app.listen(PORT, () => {
