@@ -11,8 +11,6 @@ export const buildReplyMessage = (json: CommandData[], command: string) => {
     '慣性反転',
     '向き反転',
     '無敵フレーム',
-    '無敵 (ペナ最大)',
-    '全体 (ペナ最大)',
   ];
   let replyMessage = '';
 
