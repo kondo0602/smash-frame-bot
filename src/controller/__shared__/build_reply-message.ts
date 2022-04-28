@@ -3,13 +3,12 @@ import { CommandData } from '../../../type/CommandData';
 export const buildReplyMessage = (json: CommandData[], command: string) => {
   const list: string[] = [
     '技名',
+    'ダメージ',
     '判定持続',
     '全体フレーム',
     'ガード硬直',
     '着地隙',
     '着地隙発生F',
-    '慣性反転',
-    '向き反転',
     '無敵フレーム',
   ];
   let replyMessage = '';
