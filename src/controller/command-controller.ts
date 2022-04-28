@@ -28,7 +28,7 @@ export class CommandController {
     const getCommandDataUsecase = new GetCommandDataUsecase(repo);
     const { replyToken } = event;
 
-    const character = await getCommandDataUsecase.do(name, command);
+    const character = await getCommandDataUsecase.do(name);
 
     const replyMessage: string = buildReplyMessage(
       character.commandDatas,

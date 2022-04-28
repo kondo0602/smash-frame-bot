@@ -9,11 +9,8 @@ export class GetCommandDataUsecase {
     this.commandDataRepo = commandDataRepo;
   }
 
-  public async do(name: string, command: string): Promise<Character> {
+  public async do(name: string): Promise<Character> {
     const formattedCharacterName = formatCharacterName(name);
-
-    console.log(`入力されたキャラクター名：${formattedCharacterName}`);
-    console.log(`入力されたコマンド：${command}`);
 
     const character = await this.commandDataRepo.getCharacter(
       formattedCharacterName,

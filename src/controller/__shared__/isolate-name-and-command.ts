@@ -11,5 +11,8 @@ export const isolateNameAndCommand = (message: string) => {
     }
   }
 
+  console.log(`入力されたキャラクター名：${isolatedCharacterName}`);
+  console.log(`入力されたコマンド：${command}`);
+
   return [isolatedCharacterName, command];
 };
