@@ -24,14 +24,15 @@ app.post(
     const results = await Promise.all(
       events.map(async (event: WebhookEvent) => {
         try {
-          const commandController = new CommandController();
-          commandController.search(event);
-        } catch (err: any) {
-          if (err instanceof Error) {
-            console.error(err);
+          if (event.type === 'message' && event.message.type === 'text') {
+            const commandController = new CommandController();
+            commandController.search(event);
+          } else {
+            return;
           }
+        } catch (err: any) {
+          console.error(err);
 
-          // Return an error message.
           return res.status(500).json({
             status: 'error',
           });
@@ -39,7 +40,6 @@ app.post(
       }),
     );
 
-    // Return a successfull message.
     return res.status(200).json({
       status: 'success',
       results,

@@ -3,6 +3,7 @@ import { GetCommandDataUsecase } from '../usecase/get-command-data-usecase';
 import { CommandDataRepository } from '../infrastructure/command-data-repository';
 import { isolateNameAndCommand } from './__shared__/isolate-name-and-command';
 import { buildReplyMessage } from './__shared__/build_reply-message';
+import { Character } from '../domain/entity/character';
 
 require('dotenv').config();
 
@@ -21,27 +22,35 @@ export class CommandController {
       return;
     }
 
-    let name: string, command: string;
-    [name, command] = isolateNameAndCommand(event.message.text);
+    const replyToken: string = event.replyToken;
 
-    const repo = new CommandDataRepository();
-    const getCommandDataUsecase = new GetCommandDataUsecase(repo);
-    const { replyToken } = event;
+    try {
+      let name: string, command: string;
+      [name, command] = isolateNameAndCommand(event.message.text);
 
-    const character = await getCommandDataUsecase.do(name);
+      const repo = new CommandDataRepository();
+      const getCommandDataUsecase = new GetCommandDataUsecase(repo);
 
-    const replyMessage: string = buildReplyMessage(
-      character.commandDatas,
-      command,
-    );
+      const character: Character = await getCommandDataUsecase.do(name);
 
-    // Create a new message.
-    const response: TextMessage = {
-      type: 'text',
-      text: replyMessage,
-    };
+      const replyMessage: string = buildReplyMessage(
+        character.commandDatas,
+        command,
+      );
 
-    // Reply to the user.
-    client.replyMessage(replyToken, response);
+      const response: TextMessage = {
+        type: 'text',
+        text: replyMessage,
+      };
+
+      client.replyMessage(replyToken, response);
+    } catch (error: any) {
+      const response: TextMessage = {
+        type: 'text',
+        text: '予期しないエラーが発生しました.',
+      };
+
+      client.replyMessage(replyToken, response);
+    }
   }
 }
