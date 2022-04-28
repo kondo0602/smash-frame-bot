@@ -1,7 +1,8 @@
-import { ClientConfig, Client, WebhookEvent } from '@line/bot-sdk';
+import { ClientConfig, Client, TextMessage, WebhookEvent } from '@line/bot-sdk';
 import { GetCommandDataUsecase } from '../usecase/get-command-data-usecase';
 import { CommandDataRepository } from '../infrastructure/command-data-repository';
 import { isolateNameAndCommand } from './__shared__/isolate-name-and-command';
+import { buildReplyMessage } from './__shared__/build_reply-message';
 
 require('dotenv').config();
 
@@ -24,9 +25,23 @@ export class CommandController {
     [name, command] = isolateNameAndCommand(event.message.text);
 
     const repo = new CommandDataRepository();
-    const getCommandDataUsecase = new GetCommandDataUsecase(client, repo);
+    const getCommandDataUsecase = new GetCommandDataUsecase(repo);
     const { replyToken } = event;
 
-    await getCommandDataUsecase.do(replyToken, name, command);
+    const character = await getCommandDataUsecase.do(name, command);
+
+    const replyMessage: string = buildReplyMessage(
+      character.commandDatas,
+      command,
+    );
+
+    // Create a new message.
+    const response: TextMessage = {
+      type: 'text',
+      text: replyMessage,
+    };
+
+    // Reply to the user.
+    client.replyMessage(replyToken, response);
   }
 }
