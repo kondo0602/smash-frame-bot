@@ -1,6 +1,4 @@
 export const formatCharacterName = (nickName: string) => {
-  console.log(nickName);
-
   let characterName = '';
 
   switch (nickName) {
@@ -288,8 +286,10 @@ export const formatCharacterName = (nickName: string) => {
     case 'ソラ':
       characterName = '82_ソラ';
       break;
-    default:
-      characterName = '該当なし';
+  }
+
+  if (characterName === '') {
+    throw new Error('有効なキャラクター名ではありません.');
   }
 
   return characterName;
