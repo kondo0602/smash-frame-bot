@@ -1,18 +1,22 @@
+import { CharacterNameVO } from '../../domain/entity/character-name-vo';
+
 export const isolateNameAndCommand = (message: string) => {
-  const characterNameList = ['マリオ', 'まりお', 'ルイージ', 'プリン'];
-
   let isolatedCharacterName = '';
-  let command = '';
+  let isolatedCommand = '';
 
-  for (const characterName of characterNameList) {
+  for (const characterName of CharacterNameVO.VALID_NICKNAMES) {
     if (message.startsWith(characterName)) {
       isolatedCharacterName = characterName;
-      command = message.slice(characterName.length);
+      isolatedCommand = message.slice(characterName.length);
     }
   }
 
-  console.log(`入力されたキャラクター名：${isolatedCharacterName}`);
-  console.log(`入力されたコマンド：${command}`);
+  if (isolatedCharacterName === '' || isolatedCommand === '') {
+    throw new Error('有効な値を入力してください.');
+  }
 
-  return [isolatedCharacterName, command];
+  console.log(`入力されたキャラクター名：${isolatedCharacterName}`);
+  console.log(`入力されたコマンド：${isolatedCommand}`);
+
+  return [isolatedCharacterName, isolatedCommand];
 };
