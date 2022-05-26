@@ -6,13 +6,15 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/src/index.js",
     "format": "prettier --write src/**/*.ts"
   },
   "author": "Nicholas Dwiarto <nicholasdwiarto@yahoo.com> (https://nicholasdw.com)",
   "dependencies": {
     "@line/bot-sdk": "^7.3.0",
     "csv": "^6.0.5",
+    "csvtojson": "^2.0.10",
+    "dotenv": "^16.0.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
