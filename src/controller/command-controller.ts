@@ -47,7 +47,7 @@ export class CommandController {
     } catch (error: any) {
       const response: TextMessage = {
         type: 'text',
-        text: '予期しないエラーが発生しました.',
+        text: error.message,
       };
 
       client.replyMessage(replyToken, response);
