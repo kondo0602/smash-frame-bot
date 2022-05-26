@@ -12,7 +12,9 @@ export const isolateNameAndCommand = (message: string) => {
   }
 
   if (isolatedCharacterName === '' || isolatedCommand === '') {
-    throw new Error('有効な値を入力してください.');
+    throw new Error(
+      '対応していないキャラクター名です。\r有効なキャラクター名の一覧についてはこちらをご覧ください。',
+    );
   }
 
   console.log(`入力されたキャラクター名：${isolatedCharacterName}`);
